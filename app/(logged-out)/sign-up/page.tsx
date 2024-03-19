@@ -19,6 +19,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverTrigger } from '@/components/ui/popover';
 import {
 	Select,
 	SelectContent,
@@ -27,7 +28,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PersonStandingIcon } from 'lucide-react';
+import { Calendar, CalendarIcon, PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
@@ -183,7 +184,29 @@ export default function SignUpPage() {
 									/>
 								</>
 							)}
-
+							<FormField
+								control={form.control}
+								name='dob'
+								render={({ field }) => (
+									<FormItem className='flex flex-col pt-2'>
+										<FormLabel>Date of birth</FormLabel>
+										<Popover>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant='outline'
+														className='normal-case flex justify-between pr-1'
+													>
+														<span> Pick a Date</span>
+														<CalendarIcon />
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+										</Popover>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<Button type='submit'>Sign up</Button>
 						</form>
 					</Form>
