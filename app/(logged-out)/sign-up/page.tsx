@@ -39,6 +39,18 @@ const formSchema = zod
 		accountType: zod.enum(['personal', 'company']),
 		companyName: zod.string().optional(),
 		numberOfEmployees: zod.coerce.number().optional(),
+		dob: zod.date().refine(
+			date => {
+				const today = new Date();
+				const eighteenYearsAgo = new Date(
+					today.getFullYear() - 18,
+					today.getMonth(),
+					today.getDate()
+				);
+				return date < eighteenYearsAgo;
+			},
+			{ message: 'You must be 18 years old to sign up' }
+		),
 	})
 	.superRefine((data, ctx) => {
 		if (data.accountType === 'company' && !data.companyName) {
