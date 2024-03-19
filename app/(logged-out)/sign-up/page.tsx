@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
 	Card,
 	CardContent,
@@ -19,7 +20,11 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverTrigger } from '@/components/ui/popover';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
 import {
 	Select,
 	SelectContent,
@@ -28,7 +33,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Calendar, CalendarIcon, PersonStandingIcon } from 'lucide-react';
+import { CalendarIcon, PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
@@ -92,6 +97,9 @@ export default function SignUpPage() {
 
 	// Watch accountType value to show only needed fields
 	const accountType = form.watch('accountType');
+
+	const dobFromDate = new Date();
+	dobFromDate.setFullYear(dobFromDate.getFullYear() - 120);
 
 	return (
 		<>
@@ -202,6 +210,21 @@ export default function SignUpPage() {
 													</Button>
 												</FormControl>
 											</PopoverTrigger>
+											<PopoverContent align='start'>
+												<Calendar
+													mode='single'
+													defaultMonth={field.value}
+													selected={field.value}
+													onSelect={field.onChange}
+													fixedWeeks
+													weekStartsOn={1}
+													fromDate={dobFromDate}
+													toDate={new Date()}
+													// disabled={(date)=>{
+													// 	return date.getDate()=== 0 || date.getDate()=== 6
+													// }}
+												/>
+											</PopoverContent>
 										</Popover>
 										<FormMessage />
 									</FormItem>
