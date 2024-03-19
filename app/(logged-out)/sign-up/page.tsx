@@ -33,12 +33,33 @@ import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
 
 // Schema for Zod validation
-const formSchema = zod.object({
-	email: zod.string().email(),
-	accountType: zod.enum(['personal', 'company']),
-	companyName: zod.string().optional(),
-	numberOfEmployees: zod.coerce.number().optional(),
-});
+const formSchema = zod
+	.object({
+		email: zod.string().email(),
+		accountType: zod.enum(['personal', 'company']),
+		companyName: zod.string().optional(),
+		numberOfEmployees: zod.coerce.number().optional(),
+	})
+	.superRefine((data, ctx) => {
+		if (data.accountType === 'company' && !data.companyName) {
+			ctx.addIssue({
+				code: zod.ZodIssueCode.custom,
+				path: ['companyName'],
+				message: 'Company name is required',
+			});
+		}
+		if (
+			data.accountType === 'company' &&
+			(!data.numberOfEmployees || data.numberOfEmployees < 0)
+		) {
+			ctx.addIssue({
+				code: zod.ZodIssueCode.custom,
+				path: ['numberOfEmployees'],
+				message: 'Number Of Employees is required',
+			});
+		}
+	});
+
 // Types for form generated from zod schema
 type FormType = zod.infer<typeof formSchema>;
 
@@ -55,6 +76,9 @@ export default function SignUpPage() {
 		console.log('success', data);
 		form.reset();
 	};
+
+	// Watch accountType value to show only needed fields
+	const accountType = form.watch('accountType');
 
 	return (
 		<>
@@ -109,6 +133,44 @@ export default function SignUpPage() {
 									</FormItem>
 								)}
 							/>
+
+							{accountType === 'company' && (
+								<>
+									<FormField
+										control={form.control}
+										name='companyName'
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Company name</FormLabel>
+												<FormControl>
+													<Input placeholder='Netfix ltd' {...field} />
+												</FormControl>
+
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name='numberOfEmployees'
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Employees</FormLabel>
+												<FormControl>
+													<Input
+														type='number'
+														min={0}
+														placeholder='Employees'
+														{...field}
+													/>
+												</FormControl>
+
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</>
+							)}
 
 							<Button type='submit'>Sign up</Button>
 						</form>
