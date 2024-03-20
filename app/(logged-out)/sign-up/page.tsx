@@ -58,8 +58,24 @@ const formSchema = zod
 			},
 			{ message: 'You must be 18 years old to sign up' }
 		),
+		password: zod
+			.string()
+			.min(8, 'Password must contain min 8 char !')
+			.refine(password => {
+				const reg = /^(?=.*[!@#$%^&*])(?=.*[A-Z]).*$/;
+				return reg.test(password);
+			}, 'Password must contain at least one special character and one uppercase letter'),
+		passwordConfirm: zod.string(),
 	})
 	.superRefine((data, ctx) => {
+		if (data.password !== data.passwordConfirm) {
+			ctx.addIssue({
+				code: zod.ZodIssueCode.custom,
+				path: ['passwordConfirm'],
+				message: 'Password dont match !',
+			});
+		}
+
 		if (data.accountType === 'company' && !data.companyName) {
 			ctx.addIssue({
 				code: zod.ZodIssueCode.custom,
@@ -233,6 +249,42 @@ export default function SignUpPage() {
 												/>
 											</PopoverContent>
 										</Popover>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='password'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder='********'
+												type='password'
+												{...field}
+											/>
+										</FormControl>
+
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='passwordConfirm'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Confirm password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder='********'
+												type='password'
+												{...field}
+											/>
+										</FormControl>
+
 										<FormMessage />
 									</FormItem>
 								)}
