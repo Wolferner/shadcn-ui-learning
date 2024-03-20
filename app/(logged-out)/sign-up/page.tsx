@@ -39,25 +39,34 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
 
-// Schema for Zod validation
-const formSchema = zod
+const accountTypeSchema = zod
 	.object({
-		email: zod.string().email(),
 		accountType: zod.enum(['personal', 'company']),
 		companyName: zod.string().optional(),
-		numberOfEmployees: zod.coerce.number().optional(),
-		dob: zod.date().refine(
-			date => {
-				const today = new Date();
-				const eighteenYearsAgo = new Date(
-					today.getFullYear() - 18,
-					today.getMonth(),
-					today.getDate()
-				);
-				return date < eighteenYearsAgo;
-			},
-			{ message: 'You must be 18 years old to sign up' }
-		),
+		numberOfEmployees: zod.number().optional(),
+	})
+	.superRefine((data, ctx) => {
+		if (data.accountType === 'company' && !data.companyName) {
+			ctx.addIssue({
+				code: zod.ZodIssueCode.custom,
+				path: ['companyName'],
+				message: 'Company name is required',
+			});
+		}
+		if (
+			data.accountType === 'company' &&
+			(!data.numberOfEmployees || data.numberOfEmployees < 1)
+		) {
+			ctx.addIssue({
+				code: zod.ZodIssueCode.custom,
+				path: ['numberOfEmployees'],
+				message: 'Number Of Employees is required',
+			});
+		}
+	});
+
+const passwordSchema = zod
+	.object({
 		password: zod
 			.string()
 			.min(8, 'Password must contain min 8 char !')
@@ -75,25 +84,25 @@ const formSchema = zod
 				message: 'Password dont match !',
 			});
 		}
-
-		if (data.accountType === 'company' && !data.companyName) {
-			ctx.addIssue({
-				code: zod.ZodIssueCode.custom,
-				path: ['companyName'],
-				message: 'Company name is required',
-			});
-		}
-		if (
-			data.accountType === 'company' &&
-			(!data.numberOfEmployees || data.numberOfEmployees < 0)
-		) {
-			ctx.addIssue({
-				code: zod.ZodIssueCode.custom,
-				path: ['numberOfEmployees'],
-				message: 'Number Of Employees is required',
-			});
-		}
 	});
+// Schema for Zod validation
+const baseSchema = zod.object({
+	email: zod.string().email(),
+	dob: zod.date().refine(
+		date => {
+			const today = new Date();
+			const eighteenYearsAgo = new Date(
+				today.getFullYear() - 18,
+				today.getMonth(),
+				today.getDate()
+			);
+			return date < eighteenYearsAgo;
+		},
+		{ message: 'You must be 18 years old to sign up' }
+	),
+});
+
+const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
 
 // Types for form generated from zod schema
 type FormType = zod.infer<typeof formSchema>;
