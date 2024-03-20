@@ -10,6 +10,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
 	Form,
 	FormControl,
@@ -37,14 +38,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
 
+// Zod schema for form validation
 const accountTypeSchema = zod
 	.object({
 		accountType: zod.enum(['personal', 'company']),
 		companyName: zod.string().optional(),
-		numberOfEmployees: zod.number().optional(),
+		numberOfEmployees: zod.coerce.number().optional(),
 	})
 	.superRefine((data, ctx) => {
 		if (data.accountType === 'company' && !data.companyName) {
@@ -86,7 +89,7 @@ const passwordSchema = zod
 			});
 		}
 	});
-// Schema for Zod validation
+
 const baseSchema = zod.object({
 	email: zod.string().email(),
 	dob: zod.date().refine(
@@ -101,6 +104,9 @@ const baseSchema = zod.object({
 		},
 		{ message: 'You must be 18 years old to sign up' }
 	),
+	acceptTerms: zod.boolean({
+		required_error: 'You must accept terms and conditions to sign up !',
+	}),
 });
 
 const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
@@ -108,17 +114,26 @@ const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
 // Types for form generated from zod schema
 type FormType = zod.infer<typeof formSchema>;
 
+// Component -----------------------------------------
 export default function SignUpPage() {
+	const router = useRouter();
+
 	//Initialization of react-hook-form
 	const form = useForm<FormType>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			email: '',
+			password: '',
+			passwordConfirm: '',
+			companyName: '',
+			// numberOfEmployees: null,
 		},
 	});
 
+	// Form submit handler
 	const handleSubmit = (data: FormType) => {
 		console.log('success', data);
+		router.push('/dashboard');
 		form.reset();
 	};
 
@@ -210,6 +225,7 @@ export default function SignUpPage() {
 														min={0}
 														placeholder='Employees'
 														{...field}
+														value={field.value ?? ''}
 													/>
 												</FormControl>
 
@@ -287,6 +303,37 @@ export default function SignUpPage() {
 											<PasswordInput placeholder='********' {...field} />
 										</FormControl>
 
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='acceptTerms'
+								render={({ field }) => (
+									<FormItem>
+										<div className='flex gap-2 items-center'>
+											<FormControl>
+												<Checkbox
+													checked={field.value}
+													onCheckedChange={field.onChange}
+												/>
+											</FormControl>
+											<FormLabel>I accept terms and conditions</FormLabel>
+										</div>
+										<FormDescription>
+											<small>
+												By clicking Sign Up, you agree to our
+												<Link
+													className='text-primary hover:underline'
+													href='/terms'
+												>
+													Terms, Data Policy and Cookies Policy.
+												</Link>
+												You may receive SMS notifications from us and can opt
+												out at any time.
+											</small>
+										</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}

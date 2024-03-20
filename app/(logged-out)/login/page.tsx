@@ -23,6 +23,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
 
@@ -35,6 +36,8 @@ const formSchema = zod.object({
 type FormType = zod.infer<typeof formSchema>;
 
 export default function LoginPage() {
+	const router = useRouter();
+
 	//Initialization of react-hook-form
 	const form = useForm<FormType>({
 		resolver: zodResolver(formSchema),
@@ -46,6 +49,7 @@ export default function LoginPage() {
 
 	const handleSubmit = (data: FormType) => {
 		console.log('success', data);
+		router.push('/dashboard');
 		form.reset();
 	};
 
