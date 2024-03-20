@@ -104,9 +104,14 @@ const baseSchema = zod.object({
 		},
 		{ message: 'You must be 18 years old to sign up' }
 	),
-	acceptTerms: zod.boolean({
-		required_error: 'You must accept terms and conditions to sign up !',
-	}),
+	acceptTerms: zod
+		.boolean({
+			required_error: 'You must accept terms and conditions to sign up !',
+		})
+		.refine(
+			checked => checked,
+			'You must accept terms and conditions to sign up !'
+		),
 });
 
 const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
