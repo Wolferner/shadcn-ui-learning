@@ -1,11 +1,19 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 import cm from '@/public/cm.jpg';
+import teamLeaders from '@/teamLeaders';
 import {
 	AlertTriangleIcon,
 	BadgeCheckIcon,
 	ListChecksIcon,
+	StarIcon,
 	UsersIcon,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -22,7 +30,7 @@ export default function TeemsStats() {
 					<CardContent className='flex justify-between items-center '>
 						<div className='flex gap-2'>
 							<UsersIcon />
-							<div className='text-5xl font-bold'></div>
+							<div className='text-5xl font-bold'>8</div>
 						</div>
 						<div>
 							<Button size='xs' asChild>
@@ -34,9 +42,36 @@ export default function TeemsStats() {
 
 				<Card>
 					<CardHeader className='pb-2'>
-						<CardTitle className='text-base'>Team leaders</CardTitle>
+						<CardTitle className='text-base flex justify-between items-center'>
+							<span>Team leaders</span>
+							<StarIcon className='text-yellow-500' />
+						</CardTitle>
 					</CardHeader>
-					<CardContent>b</CardContent>
+					<CardContent className='flex flex-wrap gap-2'>
+						{teamLeaders.map((leader, index) => (
+							<TooltipProvider key={`${leader.firstName}${leader.lastName}`}>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Avatar>
+											{!!leader.avatar && (
+												<Image
+													src={leader.avatar}
+													alt={`${leader.firstName} ${leader.lastName}`}
+												/>
+											)}
+											<AvatarFallback>
+												{leader.firstName[0]}
+												{leader.lastName[0]}
+											</AvatarFallback>
+										</Avatar>
+									</TooltipTrigger>
+									<TooltipContent>
+										{leader.firstName} {leader.lastName}
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
+						))}
+					</CardContent>
 				</Card>
 
 				<Card className=' flex flex-col'>
