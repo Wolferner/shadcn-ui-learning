@@ -1,12 +1,17 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { LightDarkToggle } from '@/components/ui/light-dark-toggle';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import MenuItem from './menu-item';
 import MenuTitle from './menu-title';
 
-export default function MainMenu() {
+interface MainMenuProps {
+	className?: string;
+}
+
+export default function MainMenu({ className }: MainMenuProps) {
 	return (
-		<nav className='bg-muted overflow-auto p-4 flex flex-col'>
+		<nav className={cn('bg-muted overflow-auto p-4 flex flex-col', className)}>
 			<header className='border-b dark:border-b-black border-b-zinc-300 pb-4'>
 				<MenuTitle />
 			</header>
