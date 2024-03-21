@@ -13,11 +13,13 @@ import {
 	AlertTriangleIcon,
 	BadgeCheckIcon,
 	ListChecksIcon,
+	PieChartIcon,
 	StarIcon,
 	UsersIcon,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import TeamDistributionChart from './team-distribution-chart';
 
 export default function TeemsStats() {
 	return (
@@ -76,9 +78,14 @@ export default function TeemsStats() {
 
 				<Card className=' flex flex-col'>
 					<CardHeader className='pb-2'>
-						<CardTitle className='text-base'>Team distribution</CardTitle>
+						<CardTitle className='text-base flex justify-between items-center'>
+							<span>Team distribution</span>
+							<PieChartIcon />
+						</CardTitle>
 					</CardHeader>
-					<CardContent className='flex gap-2 items-center'>a</CardContent>
+					<CardContent>
+						<TeamDistributionChart />
+					</CardContent>
 				</Card>
 			</div>
 
