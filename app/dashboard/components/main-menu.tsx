@@ -11,8 +11,10 @@ interface MainMenuProps {
 
 export default function MainMenu({ className }: MainMenuProps) {
 	return (
-		<nav className={cn('bg-muted overflow-auto p-4 flex flex-col', className)}>
-			<header className='border-b dark:border-b-black border-b-zinc-300 pb-4'>
+		<nav
+			className={cn('md:bg-muted overflow-auto p-4 flex flex-col', className)}
+		>
+			<header className=' hidden md:block border-b dark:border-b-black border-b-zinc-300 pb-4'>
 				<MenuTitle />
 			</header>
 			<ul className='pt-4 grow'>
