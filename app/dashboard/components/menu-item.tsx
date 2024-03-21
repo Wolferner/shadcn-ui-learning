@@ -1,8 +1,10 @@
 'use client';
 
+import { DrawerContext } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useContext } from 'react';
 
 interface MenuItemProps {
 	children: React.ReactNode;
@@ -10,6 +12,9 @@ interface MenuItemProps {
 }
 
 export default function MenuItem({ children, href }: MenuItemProps) {
+	// useContext will be work only on mobile version becouse Menu will be inside Drawer
+	const { onClose } = useContext(DrawerContext);
+
 	const pathname = usePathname();
 	const isActive = pathname === href;
 	return (
@@ -21,6 +26,7 @@ export default function MenuItem({ children, href }: MenuItemProps) {
 						'bg-primary hover:bg-primary dark:hover:bg-primary hover:text-primary-foreground text-primary-foreground'
 				)}
 				href={href}
+				onClick={onClose}
 			>
 				{children}
 			</Link>
