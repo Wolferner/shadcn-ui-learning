@@ -22,7 +22,7 @@ export default function DashboardLayout({
 			<MainMenu className='hidden md:flex' />
 
 			{!isDesktop && (
-				<div className='p-4 flex justify-between sticky top-0 left-0 bg-background border-b border-border'>
+				<div className='md:hidden p-4 flex justify-between sticky top-0 left-0 bg-background border-b border-border'>
 					<MenuTitle />
 					<Drawer
 						direction='right'
