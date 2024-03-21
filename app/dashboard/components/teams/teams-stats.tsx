@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import SupportTicketsResolved from './support-tickets-resolved';
 import TeamDistributionChart from './team-distribution-chart';
 
 export default function TeemsStats() {
@@ -83,7 +84,7 @@ export default function TeemsStats() {
 							<PieChartIcon />
 						</CardTitle>
 					</CardHeader>
-					<CardContent>
+					<CardContent className='pb-0'>
 						<TeamDistributionChart />
 					</CardContent>
 				</Card>
@@ -96,7 +97,9 @@ export default function TeemsStats() {
 						Support tickets resolved
 					</CardTitle>
 				</CardHeader>
-				<CardContent className='pl-0'>graph</CardContent>
+				<CardContent className='pl-0'>
+					<SupportTicketsResolved />
+				</CardContent>
 			</Card>
 		</>
 	);
