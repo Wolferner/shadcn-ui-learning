@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
 	Card,
@@ -6,18 +7,21 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import cm from '@/public/cm.jpg';
 import {
 	AlertTriangleIcon,
 	BadgeCheckIcon,
+	PartyPopperIcon,
 	UserCheck2Icon,
 	UserIcon,
 	UserRoundXIcon,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function EmployeesStats() {
 	const totalEmployees = 100;
-	const employeesPresent = 70;
+	const employeesPresent = 90;
 	const employeesPresentPercentage = (employeesPresent / totalEmployees) * 100;
 
 	return (
@@ -69,10 +73,21 @@ export default function EmployeesStats() {
 				</CardFooter>
 			</Card>
 
-			<Card className='border-pink-500'>
+			<Card className='border-pink-500 flex flex-col'>
 				<CardHeader className='pb-2'>
 					<CardTitle className='text-base'>Employee of the month</CardTitle>
 				</CardHeader>
+				<CardContent className='flex gap-2 items-center'>
+					<Avatar>
+						<Image src={cm} alt='employee of the month' />
+						<AvatarFallback>CM</AvatarFallback>
+					</Avatar>
+					<span className='text-2xl'>Colin Murray!</span>
+				</CardContent>
+				<CardFooter className='flex gap-2 items-center text-xs text-muted-foreground mt-auto'>
+					<PartyPopperIcon className='text-pink-500' />
+					<span>Congratulations</span>
+				</CardFooter>
 			</Card>
 		</div>
 	);
