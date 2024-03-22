@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from '@/components/ui/data-table';
-import data from '@/employees-data';
+import data from '@/data/employees-data';
 import { setTimeout } from 'timers/promises';
 import { columns } from './columns';
 

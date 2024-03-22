@@ -1,5 +1,5 @@
 'use client';
-import data from '@/support-tickets-data';
+import data from '@/data/support-tickets-data';
 import {
 	CartesianGrid,
 	Legend,

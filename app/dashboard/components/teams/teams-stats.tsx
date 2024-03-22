@@ -7,8 +7,8 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
+import teamLeaders from '@/data/teamLeaders-data';
 import cm from '@/public/cm.jpg';
-import teamLeaders from '@/teamLeaders';
 import {
 	AlertTriangleIcon,
 	BadgeCheckIcon,
