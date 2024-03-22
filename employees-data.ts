@@ -5,7 +5,7 @@ const employees = [
 		lastName: 'Murray',
 		teamName: 'alpha',
 		isTeamLeader: true,
-		avatar: '/images/cm.jpg',
+		avatar: '/cm.jpg',
 	},
 	{
 		id: 2,
@@ -27,7 +27,7 @@ const employees = [
 		lastName: 'Fey',
 		teamName: 'canary',
 		isTeamLeader: true,
-		avatar: '/images/tf.jpg',
+		avatar: '/tf.jpg',
 	},
 	{
 		id: 5,
@@ -56,7 +56,7 @@ const employees = [
 		lastName: 'Lopez',
 		teamName: 'delta',
 		isTeamLeader: false,
-		avatar: '/images/rl.jpg',
+		avatar: '/rl.jpg',
 	},
 	{
 		id: 9,
